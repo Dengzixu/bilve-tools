@@ -1,1 +1,3 @@
 rootProject.name = 'bilve-tools'
+
+include 'blive-danmaku-java'
