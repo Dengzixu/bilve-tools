@@ -3,6 +3,7 @@ package net.dengzixu.bilvetools.websocket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import net.dengzixu.bilvedanmaku.enums.Message;
 import net.dengzixu.bilvedanmaku.message.body.SimpleMessageBody;
 import net.dengzixu.bilvetools.constant.Constant;
 import org.springframework.stereotype.Component;
@@ -56,16 +57,16 @@ public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handle
     public void doHandler(SimpleMessageBody<?> simpleMessageBody) {
         String stringMessage = null;
 
-        System.out.println(simpleMessageBody.convertToString());
+        if (!Message._NULL.equals(simpleMessageBody.message())) {
+            try {
+                stringMessage = new ObjectMapper()
+                        .registerModule(new Jdk8Module())
+                        .writeValueAsString(simpleMessageBody);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            stringMessage = new ObjectMapper()
-                    .registerModule(new Jdk8Module())
-                    .writeValueAsString(simpleMessageBody);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            this.sendMessage(stringMessage);
         }
-
-        this.sendMessage(stringMessage);
     }
 }
