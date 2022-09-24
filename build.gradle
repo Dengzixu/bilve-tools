@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'net.dengzixu'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.0-beta'
 sourceCompatibility = '17'
 
 configurations {
@@ -34,6 +34,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     implementation 'commons-cli:commons-cli:1.5.0'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jdk8
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.4'
+
 }
 
 tasks.named('test') {

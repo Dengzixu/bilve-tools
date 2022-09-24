@@ -1,16 +1,11 @@
 package net.dengzixu.bilvetools;
 
+import net.dengzixu.bilvedanmaku.BLiveDanmakuClient;
 import net.dengzixu.bilvetools.constant.Constant;
 import org.apache.commons.cli.*;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class BilveToolsApplication implements CommandLineRunner {
@@ -39,6 +34,8 @@ public class BilveToolsApplication implements CommandLineRunner {
             Constant.ROOM_ID = Long.parseLong(line.getOptionValue("room-id"));
 
             LOGGER.info("直播间ID: {}", Constant.ROOM_ID);
+
+            Constant.bLiveDanmakuClient = BLiveDanmakuClient.getInstance(Constant.ROOM_ID).connect();
         } catch (ParseException e) {
             LOGGER.error("命令行解析错误", e);
             System.exit(1);
