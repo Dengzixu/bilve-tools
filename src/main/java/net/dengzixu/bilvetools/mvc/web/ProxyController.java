@@ -19,8 +19,6 @@ public class ProxyController {
     // Looger
     private static final org.slf4j.Logger Logger = org.slf4j.LoggerFactory.getLogger(ProxyController.class);
 
-
-
     @GetMapping("/**")
     public ResponseEntity<String> proxy(HttpServletRequest httpServletRequest) {
 
@@ -50,12 +48,14 @@ public class ProxyController {
 
         try (Response response = okHttpClient.newCall(request).execute()) {
 
+            Logger.info("[Proxy] 代理 {} 成功", fullURL);
+
             return ResponseEntity.status(response.code())
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(response.body() != null ? response.body().string() : null);
 
         } catch (IOException e) {
-            Logger.error("[Proxy] 出现异常 ", e);
+            Logger.error("[Proxy] 代理 {}  出现异常 ", fullURL, e);
             return ResponseEntity.status(503).build();
         }
     }
