@@ -1,0 +1,8 @@
+spring:
+  mvc:
+    static-path-pattern: /web-ui/**
+  web:
+    resources:
+      static-locations: file:./web-ui/
+server:
+  port: 25501
