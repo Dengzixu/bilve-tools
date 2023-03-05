@@ -1,6 +1,6 @@
 spring:
   mvc:
-    static-path-pattern: /web-ui/**
+    static-path-pattern: /**
   web:
     resources:
       static-locations: file:./web-ui/
