@@ -33,8 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -46,7 +45,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-scalars
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-
 
 
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
