@@ -3,6 +3,6 @@ spring:
     static-path-pattern: /**
   web:
     resources:
-      static-locations: file:./web-ui/
+      static-locations: file:./statics/
 server:
   port: 25501
