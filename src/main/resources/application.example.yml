@@ -1,0 +1,15 @@
+1spring:
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: file:./statics/
+server:
+  port: 25501
+  ssl: #ssl配置
+    enabled: true  # 默认为true
+    #key-alias: alias-key # 别名(可以不进行配置)
+    key-store: classpath:ssl/certificate.jks
+    # key-password: 私钥密码
+    key-store-password: th1d44ty
+    key-store-type: JKS
