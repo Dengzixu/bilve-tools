@@ -1,8 +1,0 @@
-spring:
-  mvc:
-    static-path-pattern: /**
-  web:
-    resources:
-      static-locations: file:./statics/
-server:
-  port: 25501
