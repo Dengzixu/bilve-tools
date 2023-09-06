@@ -4,12 +4,14 @@
   web:
     resources:
       static-locations: file:./statics/
+  profiles:
+    include: live
 server:
   port: 25501
   ssl: #ssl配置
     enabled: true  # 默认为true
     #key-alias: alias-key # 别名(可以不进行配置)
-    key-store: classpath:ssl/certificate.jks
+    key-store: classpath:ssl/certificate.jks # 这里先填写秘钥文件路径
     # key-password: 私钥密码
-    key-store-password: th1d44ty
+    key-store-password: <PASSWORD> # 这里是 JKS 文件的密码
     key-store-type: JKS

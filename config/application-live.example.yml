@@ -1,0 +1,5 @@
+blive-tools:
+  room-id: <ROOM_ID>
+  auth:
+    uid: <UID>
+    sessdata: <SESSDATA>
