@@ -1,11 +1,11 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.4'
+    id 'org.springframework.boot' version '2.7.15'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
     id 'java'
 }
 
 group = 'net.dengzixu'
-version = '0.1.0-beta'
+version = '0.1.1'
 sourceCompatibility = '17'
 
 tasks.withType(JavaCompile) {
@@ -46,9 +46,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-scalars
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
 
-
-    // https://mvnrepository.com/artifact/commons-cli/commons-cli
-    implementation 'commons-cli:commons-cli:1.5.0'
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jdk8
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.4'

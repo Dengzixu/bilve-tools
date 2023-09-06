@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handler {
     // LOGGER
-    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(WebsocketServer.class);
+    private static final org.slf4j.Logger Logger = org.slf4j.LoggerFactory.getLogger(WebsocketServer.class);
 
     // WebSocket Session
     private Session session;
@@ -32,7 +32,7 @@ public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handle
         webSocketServers.add(this);
         this.session = session;
 
-        LOGGER.info("客户端[ID: {}] 连接成功", session.getId());
+        Logger.info("客户端[ID: {}] 连接成功", session.getId());
 
         Constant.bLiveDanmakuClient.addHandler(this);
     }
@@ -49,7 +49,7 @@ public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handle
         try {
             this.session.getBasicRemote().sendText(message);
         } catch (IOException e) {
-            LOGGER.error("推送消息发生错误", e);
+            Logger.error("推送消息发生错误", e);
         }
     }
 
@@ -63,7 +63,7 @@ public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handle
                         .registerModule(new Jdk8Module())
                         .writeValueAsString(simpleMessageBody);
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                Logger.error("消息解析失败", e);
             }
 
             this.sendMessage(stringMessage);
