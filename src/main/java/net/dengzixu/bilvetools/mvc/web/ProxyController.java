@@ -1,9 +1,12 @@
 package net.dengzixu.bilvetools.mvc.web;
 
 
+import net.dengzixu.bilvedanmaku.api.bilibili.live.BiliBiliLiveAPI;
+import net.dengzixu.bilvetools.properties.BLiveToolsProperties;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,13 @@ import java.io.IOException;
 public class ProxyController {
     // Looger
     private static final org.slf4j.Logger Logger = org.slf4j.LoggerFactory.getLogger(ProxyController.class);
+
+    private final BLiveToolsProperties bLiveToolsProperties;
+
+    @Autowired
+    public ProxyController(BLiveToolsProperties bLiveToolsProperties) {
+        this.bLiveToolsProperties = bLiveToolsProperties;
+    }
 
     @GetMapping("/**")
     public ResponseEntity<String> proxy(HttpServletRequest httpServletRequest) {
@@ -58,5 +68,12 @@ public class ProxyController {
             Logger.error("[Proxy] 代理 {}  出现异常 ", fullURL, e);
             return ResponseEntity.status(503).build();
         }
+    }
+
+    @GetMapping("/getDanmuInfo")
+    public ResponseEntity<String> proxyRoomInfo() {
+        String apiResponse = new BiliBiliLiveAPI().getDanmuInfo(bLiveToolsProperties.roomId(), bLiveToolsProperties.auth().sessdata());
+
+        return ResponseEntity.ok(apiResponse);
     }
 }

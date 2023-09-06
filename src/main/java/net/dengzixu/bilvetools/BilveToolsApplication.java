@@ -1,44 +1,50 @@
 package net.dengzixu.bilvetools;
 
 import net.dengzixu.bilvedanmaku.BLiveDanmakuClient;
+import net.dengzixu.bilvedanmaku.profile.BLiveAuthProfile;
 import net.dengzixu.bilvetools.constant.Constant;
-import org.apache.commons.cli.*;
+import net.dengzixu.bilvetools.properties.BLiveToolsProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties(BLiveToolsProperties.class)
 public class BilveToolsApplication implements CommandLineRunner {
     // LOGGER
-    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(BilveToolsApplication.class);
+    private static final org.slf4j.Logger Logger = org.slf4j.LoggerFactory.getLogger(BilveToolsApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(BilveToolsApplication.class, args);
     }
 
+
+    // 配置文件
+    private final BLiveToolsProperties bLiveToolsProperties;
+
+    @Autowired
+    public BilveToolsApplication(BLiveToolsProperties bLiveToolsProperties) {
+        this.bLiveToolsProperties = bLiveToolsProperties;
+    }
+
     @Override
-    public void run(String... args) throws Exception {
-        CommandLineParser parser = new DefaultParser();
+    public void run(String... args) {
+        // 设置房间号
+        Constant.ROOM_ID = bLiveToolsProperties.roomId();
+        Logger.info("直播间ID: {}", Constant.ROOM_ID);
 
-        Options options = new Options()
-                .addRequiredOption("ID", "room-id", true, "直播间 ID");
-
-        try {
-            CommandLine line = parser.parse(options, args);
-
-            if (!line.hasOption("room-id")) {
-                LOGGER.error("缺少直播间ID");
-                System.exit(1);
-            }
-
-            Constant.ROOM_ID = Long.parseLong(line.getOptionValue("room-id"));
-
-            LOGGER.info("直播间ID: {}", Constant.ROOM_ID);
-
-            Constant.bLiveDanmakuClient = BLiveDanmakuClient.getInstance(Constant.ROOM_ID).connect();
-        } catch (ParseException e) {
-            LOGGER.error("命令行解析错误", e);
-            System.exit(1);
+        // 获取认证配置
+        BLiveAuthProfile bLiveAuthProfile;
+        if (null == bLiveToolsProperties.auth().uid() || null == bLiveToolsProperties.auth().sessdata()) {
+            bLiveAuthProfile = BLiveAuthProfile.getAnonymous();
+        } else {
+            bLiveAuthProfile = new BLiveAuthProfile(bLiveToolsProperties.auth().uid(),
+                    bLiveToolsProperties.auth().sessdata());
         }
+
+        // 建立链接
+        Constant.bLiveDanmakuClient = BLiveDanmakuClient.getInstance(Constant.ROOM_ID, bLiveAuthProfile).connect();
     }
 }
