@@ -1,3 +1,9 @@
-[submodule "blive-danmaku-java"]
-	path = blive-danmaku-java
-	url = git@github.com:Dengzixu/blive-danmaku-java.git
+[submodule "blive-danmaku-java-connector"]
+	path = blive-danmaku-java-connector
+	url = https://github.com/blive-danmaku-java/blive-danmaku-java-connector.git
+[submodule "blive-danmaku-java-message-resolver"]
+	path = blive-danmaku-java-message-resolver
+	url = https://github.com/blive-danmaku-java/blive-danmaku-java-message-resolver.git
+[submodule "blive-danmaku-java-packet-utils"]
+	path = blive-danmaku-java-packet-utils
+	url = https://github.com/blive-danmaku-java/blive-danmaku-java-packet-utils

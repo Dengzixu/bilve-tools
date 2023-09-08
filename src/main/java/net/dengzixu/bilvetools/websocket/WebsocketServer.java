@@ -3,22 +3,29 @@ package net.dengzixu.bilvetools.websocket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import net.dengzixu.bilvedanmaku.enums.Message;
-import net.dengzixu.bilvedanmaku.message.body.SimpleMessageBody;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
 import net.dengzixu.bilvetools.constant.Constant;
+import net.dengzixu.blivedanmaku.Packet;
+import net.dengzixu.blivedanmaku.PacketResolver;
+import net.dengzixu.blivedanmaku.Resolver;
+import net.dengzixu.blivedanmaku.enums.MessageEnum;
+import net.dengzixu.blivedanmaku.enums.Operation;
+import net.dengzixu.blivedanmaku.message.Message;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
+
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-@ServerEndpoint("/server")
 @Component
-public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handler {
-    // LOGGER
+@ServerEndpoint("/message")
+public class WebsocketServer implements net.dengzixu.blivedanmaku.handler.Handler {
+    // Logger
     private static final org.slf4j.Logger Logger = org.slf4j.LoggerFactory.getLogger(WebsocketServer.class);
 
     // WebSocket Session
@@ -29,18 +36,21 @@ public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handle
     // Websocket onOpen
     @OnOpen
     public void onOpen(Session session) {
+        Logger.info("[Websocket Server (Message)] ID: {} 开始链接", session.getId());
+
         webSocketServers.add(this);
         this.session = session;
-
-        Logger.info("客户端[ID: {}] 连接成功", session.getId());
 
         Constant.bLiveDanmakuClient.addHandler(this);
     }
 
     // Websocket onClose
     @OnClose
-    public void onClose() {
+    public void onClose(Session session) {
+        Logger.info("[Websocket Server (Message)] ID: {} 断开链接", session.getId());
+
         webSocketServers.remove(this);
+
         Constant.bLiveDanmakuClient.removeHandler(this);
     }
 
@@ -49,24 +59,35 @@ public class WebsocketServer implements net.dengzixu.bilvedanmaku.handler.Handle
         try {
             this.session.getBasicRemote().sendText(message);
         } catch (IOException e) {
-            Logger.error("推送消息发生错误", e);
+            Logger.error("[Websocket Server (Message)] ID: {} 推送消息发生错误", this.session.getId(), e);
         }
     }
 
     @Override
-    public void doHandler(SimpleMessageBody<?> simpleMessageBody) {
-        String stringMessage = null;
+    public void doHandler(byte[] bytes) {
+        PacketResolver packetResolver = new PacketResolver(bytes);
 
-        if (!Message._NULL.equals(simpleMessageBody.message())) {
-            try {
-                stringMessage = new ObjectMapper()
-                        .registerModule(new Jdk8Module())
-                        .writeValueAsString(simpleMessageBody);
-            } catch (JsonProcessingException e) {
-                Logger.error("消息解析失败", e);
+        List<Packet> packets = packetResolver.resolve();
+
+        packets.forEach(packet -> {
+
+            if (packet.operation() == Operation.MESSAGE) {
+                Message<?> message = new Resolver(new String(packet.body(), StandardCharsets.UTF_8)).resolve();
+
+                String stringMessage = null;
+                try {
+                    stringMessage = new ObjectMapper()
+                            .registerModule(new Jdk8Module())
+                            .writeValueAsString(message);
+                } catch (JsonProcessingException e) {
+                    Logger.error("消息解析失败", e);
+                }
+
+                if (!message.messageEnum().equals(MessageEnum.UNKNOWN) &&
+                        !message.messageEnum().equals(MessageEnum.IGNORE)) {
+                    this.sendMessage(stringMessage);
+                }
             }
-
-            this.sendMessage(stringMessage);
-        }
+        });
     }
 }

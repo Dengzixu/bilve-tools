@@ -1,8 +1,9 @@
 package net.dengzixu.bilvetools.mvc.web;
 
 
-import net.dengzixu.bilvedanmaku.api.bilibili.live.BiliBiliLiveAPI;
+import jakarta.servlet.http.HttpServletRequest;
 import net.dengzixu.bilvetools.properties.BLiveToolsProperties;
+import net.dengzixu.blivedanmaku.api.bilibili.live.BLiveAPI;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
@@ -72,7 +72,7 @@ public class ProxyController {
 
     @GetMapping("/getDanmuInfo")
     public ResponseEntity<String> proxyRoomInfo() {
-        String apiResponse = new BiliBiliLiveAPI().getDanmuInfo(bLiveToolsProperties.roomId(), bLiveToolsProperties.auth().sessdata());
+        String apiResponse = new BLiveAPI().getDanmuInfo(bLiveToolsProperties.roomId(), bLiveToolsProperties.auth().sessdata());
 
         return ResponseEntity.ok(apiResponse);
     }

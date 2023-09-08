@@ -1,16 +1,20 @@
 package net.dengzixu.bilvetools;
 
-import net.dengzixu.bilvedanmaku.BLiveDanmakuClient;
-import net.dengzixu.bilvedanmaku.profile.BLiveAuthProfile;
+import net.dengzixu.bilvetools.config.Hints;
 import net.dengzixu.bilvetools.constant.Constant;
 import net.dengzixu.bilvetools.properties.BLiveToolsProperties;
+import net.dengzixu.bilvetools.utils.ConsoleOutHandler;
+import net.dengzixu.blivedanmaku.BLiveDanmakuClient;
+import net.dengzixu.blivedanmaku.profile.BLiveAuthProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ImportRuntimeHints;
 
 @SpringBootApplication
+@ImportRuntimeHints(Hints.class)
 @EnableConfigurationProperties(BLiveToolsProperties.class)
 public class BilveToolsApplication implements CommandLineRunner {
     // LOGGER
@@ -45,6 +49,10 @@ public class BilveToolsApplication implements CommandLineRunner {
         }
 
         // 建立链接
-        Constant.bLiveDanmakuClient = BLiveDanmakuClient.getInstance(Constant.ROOM_ID, bLiveAuthProfile).connect();
+        Constant.bLiveDanmakuClient = BLiveDanmakuClient
+                .getInstance(Constant.ROOM_ID, bLiveAuthProfile)
+                .connect();
+
+        Constant.bLiveDanmakuClient.addHandler(new ConsoleOutHandler());
     }
 }

@@ -4,5 +4,5 @@ public class Constant {
     // Room ID
     public static long ROOM_ID = 0;
 
-    public static net.dengzixu.bilvedanmaku.BLiveDanmakuClient bLiveDanmakuClient = null;
+    public static net.dengzixu.blivedanmaku.BLiveDanmakuClient bLiveDanmakuClient = null;
 }

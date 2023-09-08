@@ -1,3 +1,5 @@
 rootProject.name = 'bilve-tools'
 
-include 'blive-danmaku-java'
+include 'blive-danmaku-java-connector'
+include 'blive-danmaku-java-packet-utils'
+include 'blive-danmaku-java-message-resolver'
