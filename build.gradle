@@ -9,14 +9,6 @@ group = 'net.dengzixu'
 version = '0.2.0-beta'
 sourceCompatibility = '17'
 
-//tasks.withType(JavaCompile) {
-//    options.encoding = "UTF-8"
-//}
-//
-//tasks.withType(Javadoc) {
-//    options.encoding = 'UTF-8'
-//}
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -64,15 +56,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jdk8
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.15.2'
-}
-
-graalvmNative {
-    binaries {
-        main {
-            buildArgs.add("--initialize-at-build-time=net.dengzixu.blivedanmaku.enums.CommandEnum")
-            buildArgs.add("--initialize-at-build-time=net.dengzixu.blivedanmaku.annotation.processor.DataResolverAnnotationProcessor")
-        }
-    }
 }
 
 tasks.named('test') {
