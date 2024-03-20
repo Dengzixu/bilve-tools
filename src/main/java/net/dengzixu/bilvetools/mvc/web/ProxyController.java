@@ -36,7 +36,7 @@ public class ProxyController {
         String requestURI = httpServletRequest.getRequestURI();
 
         // 判断 URL 中是否包含 api.live.bilibili.com
-        if (!requestURI.contains("api.live.bilibili.com")) {
+        if (!requestURI.contains("api.live.bilibili.com") && !requestURI.contains("passport.bilibili.com")) {
             Logger.error("[Proxy] URL: {} 不在白名单内", requestURI);
             return ResponseEntity.status(403).body("Proxy URL 不在白名单内");
         }
@@ -48,7 +48,12 @@ public class ProxyController {
         String biliAPI = requestURI.replaceFirst("/proxy/", "");
 
         // 合成 URL
-        String fullURL = biliAPI + "?" + queryString;
+        String fullURL = "";
+        if (null != queryString) {
+            fullURL = biliAPI + "?" + queryString;
+        } else {
+            fullURL = biliAPI;
+        }
 
         // 发送请求
         OkHttpClient okHttpClient = new OkHttpClient();
