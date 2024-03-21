@@ -13,8 +13,6 @@ import java.lang.reflect.Field;
 public class Hints implements RuntimeHintsRegistrar {
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        hints.resources().registerPattern("ssl/certificate.jks");
-
         hints.reflection().registerType(WebsocketServer.class,
                 MemberCategory.INVOKE_PUBLIC_METHODS,
                 MemberCategory.INTROSPECT_PUBLIC_METHODS,

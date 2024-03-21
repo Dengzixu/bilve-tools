@@ -7,4 +7,4 @@ spring:
   profiles:
     include: live
 server:
-  port: 25501
+  port: 60606
